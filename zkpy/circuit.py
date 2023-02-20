@@ -23,7 +23,7 @@ class Circuit:
         return self.get_base() + "_js"
     
     def get_wasm_file(self):
-        return os.path.join(self.get_js_dir(), get_base()+".wasm")
+        return os.path.join(self.get_js_dir(), self.get_base()+".wasm")
 
     def compile(self):
         proc = subprocess.run(["circom", self.circ_file, "--r1cs", "--sym", "--wasm"], capture_output=True)
@@ -36,4 +36,4 @@ class Circuit:
         proc = subprocess.run(["touch", "hello_world"], capture_output=True)
 
 circuit = Circuit("circom.circom")
-circuit.compile()
+circuit.get_base()
