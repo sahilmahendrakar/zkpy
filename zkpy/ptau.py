@@ -10,6 +10,8 @@ PUBLIC_ENTROPY="0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
 def gen_ptau_file():
     return str(uuid.uuid4())+".ptau"
 
+# TODO: add ability to change working directory
+
 class PTau:
     def __init__(self, ptau_file=gen_ptau_file()):
         self.ptau_file = ptau_file
