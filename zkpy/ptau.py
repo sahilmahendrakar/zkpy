@@ -50,7 +50,7 @@ class PTau:
 
     # TODO: Add way to cleanup files
 
-if __name__ == "main":
+if __name__ == "__main__":
     ptau = PTau()
     print("Starting powers of tau")
     ptau.start()
