@@ -3,6 +3,13 @@
 import subprocess
 import os
 
+from ptau import PTau
+
+GROTH = "groth16"
+PLONK = "plonk"
+FFLONK = "fflonk"
+
+
 # TODO: add ability to change working directory
 
 # These handle finding file paths of created files during circuit compilation
@@ -50,8 +57,29 @@ class Circuit:
         gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
         proc = subprocess.run(["node", gen_wtns_file, self.wasm_file, input_file, output_file], capture_output=True)
 
+    # Sets up to generate proof. Scheme = proving scheme
+    def setup(self, scheme, ptau, output_file="circuit_final.zkey"):
+        # TODO: check scheme is either plonk, fflonk, or groth
+        proc = subprocess.run(["snarkjs", scheme, "setup", self.r1cs_file, ptau.ptau_file, output_file], capture_output=True)
+        
+
+
+
+ptau = PTau()
+print("Starting powers of tau")
+ptau.start()
+print("Contribute")
+ptau.contribute()
+print("Beacon")
+ptau.beacon()
+print("Phase2")
+ptau.prep_phase2()
+print("Verify")
+ptau.verify()
+
 circuit = Circuit("circom.circom")
 circuit.compile()
 circuit.get_info()
 circuit.print_constraints()
 circuit.gen_witness("input.json")
+circuit.setup("plonk", ptau)
