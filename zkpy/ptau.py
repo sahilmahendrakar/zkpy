@@ -5,6 +5,8 @@ import random
 import string
 import uuid
 
+PUBLIC_ENTROPY="0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
+
 class PTau:
     def __init__(self, ptau_file=str(uuid.uuid4())+".ptau"):
         self.ptau_file = ptau_file
@@ -23,12 +25,29 @@ class PTau:
             entropy = ''.join(random.choices(string.ascii_lowercase, k=100))
         if entropy[-1] != "\n":
             entropy += "\n"
-        proc = subprocess.run(["snarkjs", "powersoftau", "contribute", self.ptau_file, output_file, f'--name="{name}"', "-v", f'-e={entropy}'], capture_output=True,)
+        proc = subprocess.run(["snarkjs", "powersoftau", "contribute", self.ptau_file, output_file, f'--name="{name}"', "-v", f'-e={entropy}'], capture_output=True)
         self.ptau_file = output_file
-        print(proc.stdout.decode('utf-8'))
 
     # TODO: Handle import / export contributions from 3rd party software
 
+    # Finalizes phase 1 of the power of tau ceremony
+    def beacon(self, output_file=str(uuid.uuid4())+".ptau", public_entropy=PUBLIC_ENTROPY, iter=10):
+        proc = subprocess.run(["snarkjs", "powersoftau", "beacon", self.ptau_file, output_file, public_entropy, str(iter)], capture_output=True)
+        self.ptau_file = output_file
+
+    def verify(self):
+        proc = subprocess.run(["snarkjs", "powersoftau", "verify", self.ptau_file], capture_output=True)
+        print(proc.stdout.decode('utf-8'))
+
+    # TODO: Add way to cleanup files
+
 
 ptau = PTau()
+print("Starting powers of tau")
 ptau.start()
+print("Contribute")
+ptau.contribute()
+print("Beacon")
+ptau.beacon()
+print("Verify")
+ptau.verify()
