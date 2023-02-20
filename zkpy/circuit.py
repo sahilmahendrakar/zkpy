@@ -43,7 +43,15 @@ class Circuit:
         proc = subprocess.run(["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file], capture_output=True)
         print(proc.stdout.decode())
 
+    # TODO: Export r1cs to json
+
+    # TODO: handle filename conflict
+    def gen_witness(self, input_file, output_file="witness.wtns"):
+        gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
+        proc = subprocess.run(["node", gen_wtns_file, self.wasm_file, input_file, output_file], capture_output=True)
+
 circuit = Circuit("circom.circom")
 circuit.compile()
 circuit.get_info()
 circuit.print_constraints()
+circuit.gen_witness("input.json")
