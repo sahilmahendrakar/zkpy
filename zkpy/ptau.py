@@ -48,15 +48,15 @@ class PTau:
 
     # TODO: Add way to cleanup files
 
-
-ptau = PTau()
-print("Starting powers of tau")
-ptau.start()
-print("Contribute")
-ptau.contribute()
-print("Beacon")
-ptau.beacon()
-print("Phase2")
-ptau.prep_phase2()
-print("Verify")
-ptau.verify()
+if __name__ == "main":
+    ptau = PTau()
+    print("Starting powers of tau")
+    ptau.start()
+    print("Contribute")
+    ptau.contribute()
+    print("Beacon")
+    ptau.beacon()
+    print("Phase2")
+    ptau.prep_phase2()
+    print("Verify")
+    ptau.verify()
