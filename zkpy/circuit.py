@@ -36,11 +36,14 @@ class Circuit:
 
     # TODO: make sure compile was run first or files exist before continuing
     def get_info(self):
-        pass
+        proc = subprocess.run(["snarkjs", "r1cs", "info", self.r1cs_file], capture_output=True)
+        print(proc.stdout.decode())
 
-
-    def test(self):
-        proc = subprocess.run(["touch", "hello_world"], capture_output=True)
+    def print_constraints(self):
+        proc = subprocess.run(["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file], capture_output=True)
+        print(proc.stdout.decode())
 
 circuit = Circuit("circom.circom")
 circuit.compile()
+circuit.get_info()
+circuit.print_constraints()
