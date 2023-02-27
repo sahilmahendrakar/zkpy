@@ -7,13 +7,16 @@ import uuid
 
 PUBLIC_ENTROPY="0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
 
-def gen_ptau_file():
-    return str(uuid.uuid4())+".ptau"
+def gen_ptau_file(working_dir):
+    return os.path.join(working_dir, str(uuid.uuid4())+".ptau")
 
 # TODO: add ability to change working directory
 
 class PTau:
-    def __init__(self, ptau_file=gen_ptau_file()):
+    def __init__(self, ptau_file=None, working_dir="./"):
+        if ptau_file == None:
+            ptau_file = gen_ptau_file(working_dir)
+        self.working_dir = working_dir
         self.ptau_file = ptau_file
 
     # TODO: Check return code of process
@@ -24,7 +27,9 @@ class PTau:
         proc = subprocess.run(['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"], capture_output=True)
         
     # Contributes randomness (entropy) to power of tau ceremony
-    def contribute(self, name="", entropy="", output_file=gen_ptau_file()):
+    def contribute(self, name="", entropy="", output_file=None):
+        if output_file == None:
+            output_file = gen_ptau_file(self.working_dir)
         # If no random text is supplied, generate 100 random characters
         if entropy == "":
             entropy = ''.join(random.choices(string.ascii_lowercase, k=100))
@@ -36,11 +41,15 @@ class PTau:
     # TODO: Handle import / export contributions from 3rd party software
 
     # Finalizes phase 1 of the power of tau ceremony
-    def beacon(self, output_file=gen_ptau_file(), public_entropy=PUBLIC_ENTROPY, iter=10):
+    def beacon(self, output_file=None, public_entropy=PUBLIC_ENTROPY, iter=10):
+        if output_file == None:
+            output_file = gen_ptau_file(self.working_dir)
         proc = subprocess.run(["snarkjs", "powersoftau", "beacon", self.ptau_file, output_file, public_entropy, str(iter)], capture_output=True)
         self.ptau_file = output_file
 
-    def prep_phase2(self, output_file=gen_ptau_file()):
+    def prep_phase2(self, output_file=None):
+        if output_file == None:
+            output_file = gen_ptau_file(self.working_dir)
         proc = subprocess.run(["snarkjs", "powersoftau", "prepare", "phase2", self.ptau_file, output_file, "-v"], capture_output=True)
         self.ptau_file = output_file
 
@@ -51,7 +60,7 @@ class PTau:
     # TODO: Add way to cleanup files
 
 if __name__ == "__main__":
-    ptau = PTau()
+    ptau = PTau(working_dir='./tmp')
     print("Starting powers of tau")
     ptau.start()
     print("Contribute")
