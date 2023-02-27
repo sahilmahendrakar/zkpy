@@ -11,3 +11,6 @@ Upcoming Features:
 - Can generate proofs for circuits written in Circom
 - Can verify proofs given witness file and verification key
 - Implements both Groth16 and PLONK proving schemes
+
+## Dependencies
+zkpy requires [Circom](https://docs.circom.io/getting-started/installation/) and [snarkjs](https://github.com/iden3/snarkjs). You can find installation instructions [here](https://docs.circom.io/getting-started/installation/)
