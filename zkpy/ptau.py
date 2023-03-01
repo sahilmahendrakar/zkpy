@@ -10,8 +10,6 @@ PUBLIC_ENTROPY="0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f"
 def gen_ptau_file(working_dir):
     return os.path.join(working_dir, str(uuid.uuid4())+".ptau")
 
-# TODO: add ability to change working directory
-
 class PTau:
     def __init__(self, ptau_file=None, working_dir="./"):
         if ptau_file == None:
@@ -55,7 +53,8 @@ class PTau:
 
     def verify(self):
         proc = subprocess.run(["snarkjs", "powersoftau", "verify", self.ptau_file], capture_output=True)
-        print(proc.stdout.decode('utf-8'))    
+        print(proc.stdout.decode('utf-8'))   
+        return proc.returncode == 0
 
     # TODO: Add way to cleanup files
 
@@ -71,3 +70,4 @@ if __name__ == "__main__":
     ptau.prep_phase2()
     print("Verify")
     ptau.verify()
+    print(ptau.ptau_file)
