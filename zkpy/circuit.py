@@ -16,20 +16,26 @@ FFLONK = "fflonk"
 def get_base(circ_file):
     return os.path.basename(circ_file).split('.')[0]
 
+
 def get_r1cs_file(circ_file):
     return get_base(circ_file) + ".r1cs"
+
 
 def get_sym_file(circ_file):
     return get_base(circ_file) + ".sym"
 
+
 def get_js_dir(circ_file):
     return get_base(circ_file) + "_js"
 
+
 def get_wasm_file(circ_file):
-    return os.path.join(get_js_dir(circ_file), get_base(circ_file)+".wasm")
+    return os.path.join(get_js_dir(circ_file), get_base(circ_file) + ".wasm")
+
 
 def gen_zkey_file():
-    return str(uuid.uuid4())+".zkey"
+    return str(uuid.uuid4()) + ".zkey"
+
 
 # TODO: Add checks if subprocess fails
 # TODO: Add getters and setters
@@ -42,10 +48,13 @@ class Circuit:
         self.sym_file = sym_file
         self.js_dir = js_dir
         self.wasm_file = wasm
-        
 
     def compile(self):
-        proc = subprocess.run(["circom", self.circ_file, "--r1cs", "--sym", "--wasm", '-o', self.output_dir], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["circom", self.circ_file, "--r1cs", "--sym", "--wasm", '-o', self.output_dir],
+            capture_output=True,
+            cwd=self.working_dir,
+        )
         self.r1cs_file = os.path.join(self.output_dir, get_r1cs_file(self.circ_file))
         self.sym_file = os.path.join(self.output_dir, get_sym_file(self.circ_file))
         self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
@@ -57,7 +66,9 @@ class Circuit:
         print(proc.stdout.decode())
 
     def print_constraints(self):
-        proc = subprocess.run(["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file], capture_output=True, cwd=self.working_dir
+        )
         print(proc.stdout.decode())
 
     # TODO: Export r1cs to json
@@ -70,7 +81,9 @@ class Circuit:
         if self.wasm_file == None and self.js_dir != None:
             self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
         gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
-        proc = subprocess.run(["node", gen_wtns_file, self.wasm_file, input_file, output_file], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["node", gen_wtns_file, self.wasm_file, input_file, output_file], capture_output=True, cwd=self.working_dir
+        )
         print(proc.stdout.decode('utf-8'))
         print(proc.stderr.decode('utf-8'))
         self.wtns_file = output_file
@@ -80,25 +93,37 @@ class Circuit:
         if output_file == None:
             output_file = os.path.join(self.output_dir, gen_zkey_file())
         # TODO: check scheme is either plonk, fflonk, or groth
-        proc = subprocess.run(["snarkjs", scheme, "setup", self.r1cs_file, ptau.ptau_file, output_file], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["snarkjs", scheme, "setup", self.r1cs_file, ptau.ptau_file, output_file],
+            capture_output=True,
+            cwd=self.working_dir,
+        )
         print(proc.stdout.decode('utf-8'))
         self.zkey_file = output_file
 
     def contribute_phase2(self, output_file=None):
         if output_file == None:
             output_file = os.path.join(self.output_dir, gen_zkey_file())
-        proc = subprocess.run(["snarkjs", "zkey", "contribute", self.zkey_file, output_file, "-v"], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["snarkjs", "zkey", "contribute", self.zkey_file, output_file, "-v"],
+            capture_output=True,
+            cwd=self.working_dir,
+        )
         print(proc.stdout.decode('utf-8'))
         self.zkey_file = output_file
-        
+
     def prove(self, scheme, proof_out=None, public_out=None):
         if proof_out == None:
             proof_out = os.path.join(self.output_dir, "proof.json")
         if public_out == None:
             public_out = os.path.join(self.output_dir, "public.json")
-        proc = subprocess.run(["snarkjs", scheme, "prove", self.zkey_file, self.wtns_file, proof_out, public_out], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["snarkjs", scheme, "prove", self.zkey_file, self.wtns_file, proof_out, public_out],
+            capture_output=True,
+            cwd=self.working_dir,
+        )
         print(proc.stdout.decode('utf-8'))
-        
+
     # TODO: Create a convenience function that handles compilation, setup, witness gen, and powers of tau for a circuit
 
 

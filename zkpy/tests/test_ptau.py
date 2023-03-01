@@ -14,19 +14,22 @@ def datadir(tmpdir, request):
         dir_util.copy_tree(test_dir, str(tmpdir))
     return Path(tmpdir)
 
+
 def test_ptau_start_creates_new_file(tmp_path, datadir):
     ptau = PTau(working_dir=tmp_path)
     ptau.start()
     ptau_file = tmp_path / ptau.ptau_file
     assert ptau_file.exists()
 
+
 def test_ptau_contribute_creates_new_file(tmp_path, datadir):
     ptau_file_start = datadir / "start.ptau"
     ptau = PTau(ptau_file=ptau_file_start, working_dir=tmp_path)
     ptau.contribute()
     ptau_file_contrib = tmp_path / ptau.ptau_file
-    assert ptau_file_start != ptau_file_contrib 
+    assert ptau_file_start != ptau_file_contrib
     assert ptau_file_contrib.exists()
+
 
 def test_ptau_beacon_creates_new_file(tmp_path, datadir):
     ptau_file_contribute = datadir / "contributed.ptau"
@@ -36,6 +39,7 @@ def test_ptau_beacon_creates_new_file(tmp_path, datadir):
     assert ptau_file_beacon != ptau_file_contribute
     assert ptau_file_beacon.exists()
 
+
 def test_ptau_phase2_creates_new_file(tmp_path, datadir):
     ptau_file_beaconed = datadir / "beaconed.ptau"
     ptau = PTau(ptau_file=ptau_file_beaconed, working_dir=tmp_path)
@@ -43,6 +47,7 @@ def test_ptau_phase2_creates_new_file(tmp_path, datadir):
     ptau_file_phase2 = tmp_path / ptau.ptau_file
     assert ptau_file_phase2 != ptau_file_beaconed
     assert ptau_file_phase2.exists()
+
 
 def test_verify_fails_if_file_changed(tmp_path, datadir):
     ptau_file_contribute = datadir / "contributed.ptau"

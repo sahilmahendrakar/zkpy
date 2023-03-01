@@ -20,6 +20,7 @@ component main = Multiplier2();"""
 
 example_input = """{"a": "3", "b": "11"}"""
 
+
 def test_ptau_circuit(tmp_path):
     ptau = PTau(working_dir=tmp_path)
     ptau.start()
@@ -27,7 +28,7 @@ def test_ptau_circuit(tmp_path):
     assert ptau_file_start.exists()
     ptau.contribute()
     ptau_file_contrib = tmp_path / ptau.ptau_file
-    assert ptau_file_start != ptau_file_contrib 
+    assert ptau_file_start != ptau_file_contrib
     assert ptau_file_contrib.exists()
     ptau.beacon()
     ptau_file_beacon = tmp_path / ptau.ptau_file
@@ -66,6 +67,7 @@ def test_ptau_circuit(tmp_path):
     assert proof_file.exists()
     assert public_file.exists()
 
+
 # def test_ptau_start_contribute(tmp_path):
 #     ptau = PTau(working_dir=tmp_path)
 #     ptau.start()
@@ -73,7 +75,7 @@ def test_ptau_circuit(tmp_path):
 #     assert ptau_file_start.exists()
 #     ptau.contribute()
 #     ptau_file_contrib = tmp_path / ptau.ptau_file
-#     assert ptau_file_start != ptau_file_contrib 
+#     assert ptau_file_start != ptau_file_contrib
 #     assert ptau_file_contrib.exists()
 
 # def test_ptau_start_contribute_beacon(tmp_path):
@@ -83,7 +85,7 @@ def test_ptau_circuit(tmp_path):
 #     assert ptau_file_start.exists()
 #     ptau.contribute()
 #     ptau_file_contrib = tmp_path / ptau.ptau_file
-#     assert ptau_file_start != ptau_file_contrib 
+#     assert ptau_file_start != ptau_file_contrib
 #     assert ptau_file_contrib.exists()
 #     ptau.beacon()
 #     ptau_file_beacon = tmp_path / ptau.ptau_file
@@ -97,7 +99,7 @@ def test_ptau_circuit(tmp_path):
 #     assert ptau_file_start.exists()
 #     ptau.contribute()
 #     ptau_file_contrib = tmp_path / ptau.ptau_file
-#     assert ptau_file_start != ptau_file_contrib 
+#     assert ptau_file_start != ptau_file_contrib
 #     assert ptau_file_contrib.exists()
 #     ptau.beacon()
 #     ptau_file_beacon = tmp_path / ptau.ptau_file
@@ -115,7 +117,7 @@ def test_ptau_circuit(tmp_path):
 #     assert ptau_file_start.exists()
 #     ptau.contribute()
 #     ptau_file_contrib = tmp_path / ptau.ptau_file
-#     assert ptau_file_start != ptau_file_contrib 
+#     assert ptau_file_start != ptau_file_contrib
 #     assert ptau_file_contrib.exists()
 #     with ptau_file_contrib.open("w") as f:
 #         f.write('asdjfakjsfk')
