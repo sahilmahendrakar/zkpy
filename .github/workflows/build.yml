@@ -36,6 +36,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Test cargo
+    - name: Install dependencies
       run: |
-        cargo --help
+        make develop
