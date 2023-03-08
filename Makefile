@@ -3,6 +3,7 @@
 #########
 develop:  ## install dependencies and build library
 	python -m pip install -e .[develop]
+	bash ./install_deps.sh
 
 build:  ## build the python library
 	python setup.py build build_ext --inplace
