@@ -40,10 +40,28 @@ jobs:
       run: |
         make develop
 
-    - name: Test Circom
+    - name: Build 
       run: |
-        circom --help
-    
-    - name: Test Snarkjs
+        make build
+
+    - name: Lint
       run: |
-        snarkjs --help
+        make lint
+
+    - name: Checks
+      run: |
+        make checks
+
+    - name: Test
+      run: |
+        make coverage
+        
+    - name: Upload test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: pytest-results-${{ matrix.os }}-${{ matrix.python-version }}
+        path: python_junit.xml
+      if: ${{ always() }}
+
+    - name: Upload coverage
+      uses: codecov/codecov-action@v3
