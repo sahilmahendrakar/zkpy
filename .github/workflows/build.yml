@@ -36,7 +36,33 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    - name: Install dependencies
+    - name: Cache Circom
+      id: cache-circom
+      uses: actions/cache@v3
+      with:
+        path: ../circom
+        key: ${{ matrix.os }}-circom
+    
+    - name: Download and Build Circom
+      if: steps.cache-primes.outputs.cache-hit != 'true'
+      run: |
+        cd ..
+        git clone https://github.com/iden3/circom.git
+        cd circom
+        cargo build --release
+        cd ../zkpy
+    
+    - name: Install Circom
+      run: |
+        cd ../circom
+        cargo install --path circom
+        cd -
+
+    - name: Install snarkjs
+      run: |
+        npm install -g snarkjs
+
+    - name: Install other dependencies
       run: |
         make develop
 
