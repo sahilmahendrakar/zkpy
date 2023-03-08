@@ -1,4 +1,4 @@
-graft example_project_python
+graft zkpy
 
 include LICENSE
 include README.md
@@ -6,8 +6,10 @@ include README.md
 include .bumpversion.cfg
 include pyproject.toml
 include Makefile
+include *.md
 
 prune .github
+prune */__pycache__ 
 exclude .gitignore
 exclude .gitattributes
 
@@ -16,5 +18,7 @@ global-exclude *~
 global-exclude *.pyc
 global-exclude *.pyo
 global-exclude .git
+global-exclude .flake8
+global-exclude *.sh
 global-exclude .ipynb_checkpoints
 global-exclude .DS_Store
