@@ -14,7 +14,7 @@ def gen_ptau_file(working_dir):
 
 class PTau:
     def __init__(self, ptau_file=None, working_dir="./"):
-        if ptau_file == None:
+        if ptau_file is None:
             ptau_file = gen_ptau_file(working_dir)
         self.working_dir = working_dir
         self.ptau_file = ptau_file
@@ -24,20 +24,18 @@ class PTau:
     # and constraints is the number of constraints raised to the power of 2
     def start(self, curve='bn128', constraints='12'):
         # snarkjs powersoftau new bn128 14 pot14_0000.ptau -v
-        proc = subprocess.run(
-            ['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"], capture_output=True
-        )
+        subprocess.run(['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"], capture_output=True)
 
     # Contributes randomness (entropy) to power of tau ceremony
     def contribute(self, name="", entropy="", output_file=None):
-        if output_file == None:
+        if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
         # If no random text is supplied, generate 100 random characters
         if entropy == "":
             entropy = ''.join(random.choices(string.ascii_lowercase, k=100))
         if entropy[-1] != "\n":
             entropy += "\n"
-        proc = subprocess.run(
+        subprocess.run(
             [
                 "snarkjs",
                 "powersoftau",
@@ -56,18 +54,18 @@ class PTau:
 
     # Finalizes phase 1 of the power of tau ceremony
     def beacon(self, output_file=None, public_entropy=PUBLIC_ENTROPY, iter=10):
-        if output_file == None:
+        if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
-        proc = subprocess.run(
+        subprocess.run(
             ["snarkjs", "powersoftau", "beacon", self.ptau_file, output_file, public_entropy, str(iter)],
             capture_output=True,
         )
         self.ptau_file = output_file
 
     def prep_phase2(self, output_file=None):
-        if output_file == None:
+        if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
-        proc = subprocess.run(
+        subprocess.run(
             ["snarkjs", "powersoftau", "prepare", "phase2", self.ptau_file, output_file, "-v"], capture_output=True
         )
         self.ptau_file = output_file

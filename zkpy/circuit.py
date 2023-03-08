@@ -3,7 +3,6 @@
 import subprocess
 import os
 import uuid
-
 from zkpy.ptau import PTau
 
 GROTH = "groth16"
@@ -13,6 +12,8 @@ FFLONK = "fflonk"
 # These handle finding file paths of created files during circuit compilation
 # assume output directory is same as working directory
 # TODO: Might want to move these into their own utility file
+
+
 def get_base(circ_file):
     return os.path.basename(circ_file).split('.')[0]
 
@@ -50,7 +51,7 @@ class Circuit:
         self.wasm_file = wasm
 
     def compile(self):
-        proc = subprocess.run(
+        subprocess.run(
             ["circom", self.circ_file, "--r1cs", "--sym", "--wasm", '-o', self.output_dir],
             capture_output=True,
             cwd=self.working_dir,
@@ -76,9 +77,9 @@ class Circuit:
     # TODO: handle filename conflict
     # Need to input an input.json file
     def gen_witness(self, input_file, output_file=None):
-        if output_file == None:
+        if output_file is None:
             output_file = os.path.join(self.output_dir, "witness.wtns")
-        if self.wasm_file == None and self.js_dir != None:
+        if self.wasm_file is None and self.js_dir is not None:
             self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
         gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
         proc = subprocess.run(
@@ -90,7 +91,7 @@ class Circuit:
 
     # Sets up to generate proof. Scheme = proving scheme, ptau = previous powers of tau ceremony
     def setup(self, scheme, ptau, output_file=None):
-        if output_file == None:
+        if output_file is None:
             output_file = os.path.join(self.output_dir, gen_zkey_file())
         # TODO: check scheme is either plonk, fflonk, or groth
         proc = subprocess.run(
@@ -102,7 +103,7 @@ class Circuit:
         self.zkey_file = output_file
 
     def contribute_phase2(self, output_file=None):
-        if output_file == None:
+        if output_file is None:
             output_file = os.path.join(self.output_dir, gen_zkey_file())
         proc = subprocess.run(
             ["snarkjs", "zkey", "contribute", self.zkey_file, output_file, "-v"],
@@ -113,9 +114,9 @@ class Circuit:
         self.zkey_file = output_file
 
     def prove(self, scheme, proof_out=None, public_out=None):
-        if proof_out == None:
+        if proof_out is None:
             proof_out = os.path.join(self.output_dir, "proof.json")
-        if public_out == None:
+        if public_out is None:
             public_out = os.path.join(self.output_dir, "public.json")
         proc = subprocess.run(
             ["snarkjs", scheme, "prove", self.zkey_file, self.wtns_file, proof_out, public_out],

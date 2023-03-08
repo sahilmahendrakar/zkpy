@@ -4,6 +4,7 @@ from pytest import fixture
 import os
 from pathlib import Path
 
+
 # Uses existing test files for better unit test isolation
 @fixture
 def datadir(tmpdir, request):
