@@ -37,6 +37,6 @@ jobs:
         cache: 'npm'
         cache-dependency-path: package-lock.json
 
-     - name: Test npm
+    - name: Test npm
       run: |
         npm --help
