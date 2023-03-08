@@ -4,6 +4,7 @@ from pytest import fixture
 import os
 from pathlib import Path
 
+
 # Uses existing test files for better unit test isolation
 @fixture
 def datadir(tmpdir, request):
@@ -54,4 +55,4 @@ def test_verify_fails_if_file_changed(tmp_path, datadir):
     ptau = PTau(ptau_file=ptau_file_contribute, working_dir=tmp_path)
     with ptau_file_contribute.open("w") as f:
         f.write('asdjfakjsfk')
-    assert ptau.verify() == False
+    assert ptau.verify() is False
