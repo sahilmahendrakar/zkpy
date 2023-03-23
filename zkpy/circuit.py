@@ -34,14 +34,30 @@ def get_wasm_file(circ_file):
     return os.path.join(get_js_dir(circ_file), get_base(circ_file) + ".wasm")
 
 
+def gen_rand_filename():
+    return str(uuid.uuid4())
+
+
 def gen_zkey_file():
-    return str(uuid.uuid4()) + ".zkey"
+    return gen_rand_filename() + ".zkey"
 
 
 # TODO: Add checks if subprocess fails
 # TODO: Add getters and setters
 class Circuit:
-    def __init__(self, circ_file, output_dir="./", working_dir="./", r1cs=None, sym_file=None, js_dir=None, wasm=None):
+    def __init__(
+        self,
+        circ_file,
+        output_dir="./",
+        working_dir="./",
+        r1cs=None,
+        sym_file=None,
+        js_dir=None,
+        wasm=None,
+        witness=None,
+        zkey=None,
+        vkey=None,
+    ):
         self.circ_file = circ_file
         self.output_dir = output_dir
         self.working_dir = working_dir
@@ -49,6 +65,9 @@ class Circuit:
         self.sym_file = sym_file
         self.js_dir = js_dir
         self.wasm_file = wasm
+        self.wtns_file = witness
+        self.zkey_file = zkey
+        self.vkey_file = vkey
 
     def compile(self):
         subprocess.run(
@@ -63,12 +82,17 @@ class Circuit:
 
     # TODO: make sure compile was run first or files exist before continuing
     def get_info(self):
-        proc = subprocess.run(["snarkjs", "r1cs", "info", self.r1cs_file], capture_output=True, cwd=self.working_dir)
+        proc = subprocess.run(
+            ["snarkjs", "r1cs", "info", self.r1cs_file], capture_output=True, cwd=self.working_dir, check=True
+        )
         print(proc.stdout.decode())
 
     def print_constraints(self):
         proc = subprocess.run(
-            ["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file], capture_output=True, cwd=self.working_dir
+            ["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
         )
         print(proc.stdout.decode())
 
@@ -83,7 +107,10 @@ class Circuit:
             self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
         gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
         proc = subprocess.run(
-            ["node", gen_wtns_file, self.wasm_file, input_file, output_file], capture_output=True, cwd=self.working_dir
+            ["node", gen_wtns_file, self.wasm_file, input_file, output_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
         )
         print(proc.stdout.decode('utf-8'))
         print(proc.stderr.decode('utf-8'))
@@ -98,17 +125,27 @@ class Circuit:
             ["snarkjs", scheme, "setup", self.r1cs_file, ptau.ptau_file, output_file],
             capture_output=True,
             cwd=self.working_dir,
+            check=True,
         )
         print(proc.stdout.decode('utf-8'))
         self.zkey_file = output_file
 
-    def contribute_phase2(self, output_file=None):
+    def contribute_phase2(self, entropy="", output_file=None):
         if output_file is None:
             output_file = os.path.join(self.output_dir, gen_zkey_file())
         proc = subprocess.run(
-            ["snarkjs", "zkey", "contribute", self.zkey_file, output_file, "-v"],
+            [
+                "snarkjs",
+                "zkey",
+                "contribute",
+                self.zkey_file,
+                output_file,
+                "-v",
+                f'-e={entropy}',
+            ],
             capture_output=True,
             cwd=self.working_dir,
+            check=True,
         )
         print(proc.stdout.decode('utf-8'))
         self.zkey_file = output_file
@@ -122,8 +159,58 @@ class Circuit:
             ["snarkjs", scheme, "prove", self.zkey_file, self.wtns_file, proof_out, public_out],
             capture_output=True,
             cwd=self.working_dir,
+            check=True,
+        )
+        self.proof_file = proof_out
+        self.public_file = public_out
+        print(proc.stdout.decode('utf-8'))
+
+    def verify_zkey(self, ptau, zkey_file=None):
+        if zkey_file is None:
+            zkey_file = self.zkey_file
+        proc = subprocess.run(
+            ["snarkjs", "zkey", "verify", self.r1cs_file, ptau.ptau_file, zkey_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
         )
         print(proc.stdout.decode('utf-8'))
+        if proc.stderr:
+            return False
+        else:
+            return True
+
+    def export_vkey(self, zkey_file=None, output_file=None):
+        if zkey_file is None:
+            zkey_file = self.zkey_file
+        if output_file is None:
+            output_file = os.path.join(self.output_dir, gen_rand_filename() + '.json')
+        subprocess.run(
+            ["snarkjs", "zkey", "export", "verificationkey", zkey_file, output_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
+        )
+        self.vkey_file = output_file
+
+    def verify(self, scheme, vkey_file=None, public_file=None, proof_file=None):
+        if vkey_file is None:
+            vkey_file = self.vkey_file
+        if public_file is None:
+            public_file = self.public_file
+        if proof_file is None:
+            proof_file = self.proof_file
+        proc = subprocess.run(
+            ["snarkjs", scheme, "verify", vkey_file, public_file, proof_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
+        )
+        print(proc.stdout.decode('utf-8'))
+        if proc.stderr:
+            return False
+        else:
+            return True
 
     # TODO: Create a convenience function that handles compilation, setup, witness gen, and powers of tau for a circuit
 
@@ -149,3 +236,5 @@ if __name__ == "__main__":
     circuit.gen_witness("./example_circuits/input.json")
     circuit.setup("plonk", ptau)
     circuit.prove("plonk")
+    circuit.export_vkey()
+    circuit.verify("plonk")

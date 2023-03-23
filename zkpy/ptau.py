@@ -47,6 +47,7 @@ class PTau:
                 f'-e={entropy}',
             ],
             capture_output=True,
+            check=True,
         )
         self.ptau_file = output_file
 
@@ -59,6 +60,7 @@ class PTau:
         subprocess.run(
             ["snarkjs", "powersoftau", "beacon", self.ptau_file, output_file, public_entropy, str(iter)],
             capture_output=True,
+            check=True,
         )
         self.ptau_file = output_file
 
@@ -66,14 +68,15 @@ class PTau:
         if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
         subprocess.run(
-            ["snarkjs", "powersoftau", "prepare", "phase2", self.ptau_file, output_file, "-v"], capture_output=True
+            ["snarkjs", "powersoftau", "prepare", "phase2", self.ptau_file, output_file, "-v"],
+            capture_output=True,
+            check=True,
         )
         self.ptau_file = output_file
 
     def verify(self):
-        proc = subprocess.run(["snarkjs", "powersoftau", "verify", self.ptau_file], capture_output=True)
+        proc = subprocess.run(["snarkjs", "powersoftau", "verify", self.ptau_file], capture_output=True, check=True)
         print(proc.stdout.decode('utf-8'))
-        return proc.returncode == 0
 
     # TODO: Add way to cleanup files
 

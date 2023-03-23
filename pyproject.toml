@@ -64,10 +64,10 @@ ignore = [
 ignore = ['E203', 'W503']
 max-line-length=120
 exclude=[
-    'example_project_python/tests/*'
+    'zkpy/tests/*'
 ]
 per-file-ignores= [
-    'example_project_python/__init__.py:F401, F403'
+    'zkpy/__init__.py:F401, F403'
 ]
 
 
