@@ -5,6 +5,8 @@ A Python library that allows for easy compiling/proving/verifying of zk circuits
 ![GitHub issues](https://img.shields.io/github/issues/sahilmahendrakar/zkpy)
 ![example workflow](https://github.com/sahilmahendrakar/zkpy/actions/workflows/build.yml/badge.svg)
 ![codecov](https://codecov.io/gh/sahilmahendrakar/zkpy/branch/main/graph/badge.svg?token=UJF0PUJKXN)
+[![PyPI](https://img.shields.io/pypi/v/zkpy)](https://pypi.org/project/zkpy/)
+
 
 ## Overview
 ZKPy is a Python library that allows for easy compiling/proving/verifying of zk circuits. It is implemented as a wrapper of Circom or SnarkJS, allowing developers to incorporate zero knowledge proofs into Python projects.
