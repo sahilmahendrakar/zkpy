@@ -11,7 +11,7 @@ name = "zkpy"
 authors = [{name = "Sahil Mahendrakar", email = "sahil.mahendrakar@gmail.com"}]
 description="A Python library that allows for easy compiling/proving/verifying of zk circuits"
 readme = "README.md"
-version = "0.0.1"
+version = "0.1.0"
 requires-python = ">=3.7"
 
 dependencies = []
