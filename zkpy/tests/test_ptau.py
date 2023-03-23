@@ -1,8 +1,10 @@
 from zkpy.ptau import PTau
 from distutils import dir_util
 from pytest import fixture
+from pytest import raises
 import os
 from pathlib import Path
+import subprocess
 
 
 # Uses existing test files for better unit test isolation
@@ -51,8 +53,9 @@ def test_ptau_phase2_creates_new_file(tmp_path, datadir):
 
 
 def test_verify_fails_if_file_changed(tmp_path, datadir):
-    ptau_file_contribute = datadir / "contributed.ptau"
-    ptau = PTau(ptau_file=ptau_file_contribute, working_dir=tmp_path)
-    with ptau_file_contribute.open("w") as f:
-        f.write('asdjfakjsfk')
-    assert ptau.verify() is False
+    with raises(subprocess.CalledProcessError):
+        ptau_file_contribute = datadir / "contributed.ptau"
+        ptau = PTau(ptau_file=ptau_file_contribute, working_dir=tmp_path)
+        with ptau_file_contribute.open("w") as f:
+            f.write('asdjfakjsfk')
+        assert ptau.verify() is False
