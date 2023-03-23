@@ -1,4 +1,5 @@
 from zkpy.circuit import Circuit
+from zkpy.ptau import PTau
 from distutils import dir_util
 from pytest import fixture
 import os
@@ -28,6 +29,13 @@ def test_compile_creates_3_files(tmp_path, datadir):
     assert js_dir.exists()
 
 
+def test_get_info(datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    circ = Circuit(circ_file, r1cs=r1cs_file)
+    circ.get_info()
+
+
 def test_gen_witness(tmp_path, datadir):
     circ_file = datadir / 'example_circuit.circom'
     r1cs_file = datadir / "example_circuit.r1cs"
@@ -39,3 +47,51 @@ def test_gen_witness(tmp_path, datadir):
     circ.gen_witness(input_file=inp_file)
     wtns_file = tmp_path / "witness.wtns"
     assert wtns_file.exists()
+
+
+def test_contribute_phase2(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    zkey_file = datadir / 'zkey_groth16.zkey'
+    circ = Circuit(circ_file, zkey=zkey_file, working_dir=tmp_path)
+    circ.contribute_phase2(entropy="random text")
+    new_zkey = tmp_path / circ.zkey_file
+    assert new_zkey.exists() and new_zkey != zkey_file
+
+
+def test_prove(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    zkey_file = datadir / 'zkey.zkey'
+    wtns_file = datadir / 'witness.wtns'
+    circ = Circuit(circ_file, witness=wtns_file, zkey=zkey_file, working_dir=tmp_path)
+    circ.prove("plonk")
+    public_file = tmp_path / circ.public_file
+    proof_file = tmp_path / circ.proof_file
+    assert public_file.exists() and proof_file.exists()
+
+
+def test_verify_zkey(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    ptau_file = datadir / 'phase2.ptau'
+    zkey_file = datadir / 'zkey_groth16.zkey'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    ptau = PTau(ptau_file=ptau_file)
+    circuit = Circuit(circ_file, r1cs=r1cs_file, zkey=zkey_file)
+    assert circuit.verify_zkey(ptau)
+
+
+def test_export_vkey(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    zkey_file = datadir / 'zkey.zkey'
+    circuit = Circuit(circ_file, zkey=zkey_file, working_dir=tmp_path)
+    circuit.export_vkey()
+    vkey_file = tmp_path / circuit.vkey_file
+    assert vkey_file.exists()
+
+
+def test_verify(datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    vkey_file = datadir / 'vkey.json'
+    public_file = datadir / 'public.json'
+    proof_file = datadir / 'proof.json'
+    circuit = Circuit(circ_file)
+    circuit.verify("plonk", vkey_file=vkey_file, public_file=public_file, proof_file=proof_file)
