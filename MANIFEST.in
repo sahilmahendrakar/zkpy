@@ -22,3 +22,4 @@ global-exclude .flake8
 global-exclude *.sh
 global-exclude .ipynb_checkpoints
 global-exclude .DS_Store
+global-exclude docs/*
