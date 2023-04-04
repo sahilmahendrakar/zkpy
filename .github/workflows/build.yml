@@ -36,6 +36,22 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
+    - name: Instal python dependencies
+      run: |
+        make develop
+
+    - name: Build 
+      run: |
+        make build
+
+    - name: Lint
+      run: |
+        make lint
+
+    - name: Checks
+      run: |
+        make checks
+
     - name: Cache Circom
       id: cache-circom
       uses: actions/cache@v3
@@ -62,25 +78,9 @@ jobs:
       run: |
         npm install -g snarkjs
 
-    - name: Install other dependencies
-      run: |
-        make develop
-
     - name: Test circom
       run: |
         circom --help
-
-    - name: Build 
-      run: |
-        make build
-
-    - name: Lint
-      run: |
-        make lint
-
-    - name: Checks
-      run: |
-        make checks
 
     - name: Test
       run: |

@@ -1,4 +1,3 @@
-''' CLI Wrapper for SnarkJS Powers of Tau '''
 import subprocess
 import os
 import random
@@ -13,6 +12,15 @@ def gen_ptau_file(working_dir):
 
 
 class PTau:
+    """
+    Manages creating and contributing to a powers of tau ceremony.
+
+    Args:
+        ptau_file (str, optional): Path to a previously generated powers of tau ceremony file.
+        working_dir (str, optional): Path that all given file paths are relative to. Defaults to the current directory
+
+    """
+
     def __init__(self, ptau_file=None, working_dir="./"):
         if ptau_file is None:
             ptau_file = gen_ptau_file(working_dir)
@@ -23,11 +31,26 @@ class PTau:
     # Begins a power of tau ceremony, curve is the curve to use
     # and constraints is the number of constraints raised to the power of 2
     def start(self, curve='bn128', constraints='12'):
+        """Initializes a powers of tau ceremony
+
+        Args:
+            curve (str, optional): Curve to use in the powers of tau ceremony. Defaults to the `bn128` curve.
+            constraints (str, optional): The number of constraints supported by the powers of tau ceremony raised to the power of 2.
+
+        """
         # snarkjs powersoftau new bn128 14 pot14_0000.ptau -v
         subprocess.run(['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"], capture_output=True)
 
     # Contributes randomness (entropy) to power of tau ceremony
     def contribute(self, name="", entropy="", output_file=None):
+        """Contributes to the powers of tau ceremony
+
+        Args:
+            name (str, optional): Name of the contribution.
+            entropy (str, optional): Random text to use as entropy in the contribution. Defaults to random lowercase letters.
+            output_file (str, optional): Path of where the ptau file should be outputted to.
+
+        """
         if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
         # If no random text is supplied, generate 100 random characters
@@ -55,6 +78,14 @@ class PTau:
 
     # Finalizes phase 1 of the power of tau ceremony
     def beacon(self, output_file=None, public_entropy=PUBLIC_ENTROPY, iter=10):
+        """Finalize phase 1 of the powers of tau ceremony.
+
+        Args:
+            output_file (str, optional): Path of where the ptau file should be outputted to.
+            public_entropy (str, optional): Public entropy to use in the beacon. Defaults to `0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f`
+            iter (int): Specifies how many iterations to use in the beacon.
+
+        """
         if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
         subprocess.run(
@@ -65,6 +96,12 @@ class PTau:
         self.ptau_file = output_file
 
     def prep_phase2(self, output_file=None):
+        """Prepare for phase 2 of the powers of tau ceremony.
+
+        Args:
+            output_file (str, optional): Path of where the ptau file should be outputted to.
+
+        """
         if output_file is None:
             output_file = gen_ptau_file(self.working_dir)
         subprocess.run(
@@ -75,6 +112,7 @@ class PTau:
         self.ptau_file = output_file
 
     def verify(self):
+        """Verfies the power of tau ceremony is valid."""
         proc = subprocess.run(["snarkjs", "powersoftau", "verify", self.ptau_file], capture_output=True, check=True)
         print(proc.stdout.decode('utf-8'))
 
