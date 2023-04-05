@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Circuit &mdash; zkpy 0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PTau" href="ptau.html" />
+    <link rel="prev" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            zkpy
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage and Examples</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Circuit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ptau.html">PTau</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">zkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">Circuit</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/circuit.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-circuit">
+<span id="circuit"></span><h1>Circuit<a class="headerlink" href="#module-circuit" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="circuit.Circuit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuit.</span></span><span class="sig-name descname"><span class="pre">Circuit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">circ_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">working_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'./'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1cs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sym_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">js_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wasm</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">witness</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zkey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vkey</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages compiling, proving, and verifying Circom circuits.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>circ_file</strong> (<em>str</em>) – Path to a circom circuit file.</p></li>
+<li><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where generated files should be outputted.</p></li>
+<li><p><strong>directory.</strong> (<em>Defaults to the current</em>) – </p></li>
+<li><p><strong>working_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path that all given file paths are relative to. Defaults to the current directory</p></li>
+<li><p><strong>r1cs</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated r1cs file.</p></li>
+<li><p><strong>sym_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated symbols file.</p></li>
+<li><p><strong>js_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated directory with JS files.</p></li>
+<li><p><strong>wasm</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated wasm file.</p></li>
+<li><p><strong>witness</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a witness file.</p></li>
+<li><p><strong>zkey</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated zkey file.</p></li>
+<li><p><strong>vkey</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated verification key file.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.circ_file">
+<span class="sig-name descname"><span class="pre">circ_file</span></span><a class="headerlink" href="#circuit.Circuit.circ_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a circom circuit file. This circuit can be compiled, proved, etc. with this class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.output_dir">
+<span class="sig-name descname"><span class="pre">output_dir</span></span><a class="headerlink" href="#circuit.Circuit.output_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to where generated files will be outputted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.working_dir">
+<span class="sig-name descname"><span class="pre">working_dir</span></span><a class="headerlink" href="#circuit.Circuit.working_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies the path that all given file paths are relative to.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.r1cs_file">
+<span class="sig-name descname"><span class="pre">r1cs_file</span></span><a class="headerlink" href="#circuit.Circuit.r1cs_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to an r1cs file. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.sym_file">
+<span class="sig-name descname"><span class="pre">sym_file</span></span><a class="headerlink" href="#circuit.Circuit.sym_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a symbols file. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.js_dir">
+<span class="sig-name descname"><span class="pre">js_dir</span></span><a class="headerlink" href="#circuit.Circuit.js_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to the JS directory generated by SnarkJS. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.wasm_file">
+<span class="sig-name descname"><span class="pre">wasm_file</span></span><a class="headerlink" href="#circuit.Circuit.wasm_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a wasm file. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.zkey">
+<span class="sig-name descname"><span class="pre">zkey</span></span><a class="headerlink" href="#circuit.Circuit.zkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a zkey file. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="circuit.Circuit.vkey">
+<span class="sig-name descname"><span class="pre">vkey</span></span><a class="headerlink" href="#circuit.Circuit.vkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to a verification key file. This can be generated by the class itself when a circuit is compiled, or the path can be given if already generated</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.compile">
+<span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.compile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compiles the circuit and generates an r1cs file, a symbols file, a wasm file, and a js dir</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.contribute_phase2">
+<span class="sig-name descname"><span class="pre">contribute_phase2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">entropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.contribute_phase2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contributes to phase 2. Required for the Groth16 proving scheme. The circuit must have been previously setup.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>entropy</strong> (<em>str</em>) – Random entropy to contribute to the zkey.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the zkey file should be outputted. Defaults to a randomly generated file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.export_vkey">
+<span class="sig-name descname"><span class="pre">export_vkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zkey_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.export_vkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports a verification key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>zkey_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to a zkey file from which the verification key should be created. Defaults to a previously generated zkey.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where the verification key file should be outputted. Defaults to a randomly generated file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.gen_witness">
+<span class="sig-name descname"><span class="pre">gen_witness</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.gen_witness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a witness file. Requires that the circuit was compiled first.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_file</strong> (<em>str</em>) – Path to an input json file that specifies the inputs to the circuit.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path of where the witness file should be outputted. Defaults to a randomly generated file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints info about the circuit. Requires that the circuit was compiled first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.print_constraints">
+<span class="sig-name descname"><span class="pre">print_constraints</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.print_constraints" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints info about the constraints of the circuit. Requires that the circuit was compiled first.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.prove">
+<span class="sig-name descname"><span class="pre">prove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_out</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.prove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a proof for the circuit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scheme</strong> (<em>str</em>) – The proving scheme to use. Can either be <cite>GROTH</cite>, <cite>PLONK</cite>, or <cite>FFLONK</cite>.</p></li>
+<li><p><strong>proof_out</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the proof file should be outputted. Defaults to ‘proof.json’.</p></li>
+<li><p><strong>public_out</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the public file should be outputted. Defaults to ‘public.json’.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.setup">
+<span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ptau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prepares to generate proof and creates a zkey file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scheme</strong> (<em>str</em>) – The proving scheme to use. Can either be <cite>GROTH</cite>, <cite>PLONK</cite>, or <cite>FFLONK</cite>.</p></li>
+<li><p><strong>ptau</strong> (<a class="reference internal" href="ptau.html#ptau.PTau" title="ptau.PTau"><em>PTau</em></a>) – A <cite>PTau</cite> object with a completed powers of tau ceremony.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em>) – Path of where the zkey file should be outputted. Defaults to a randomly generated file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.verify">
+<span class="sig-name descname"><span class="pre">verify</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vkey_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">public_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">proof_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.verify" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies that a proof is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vkey_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to a verification key file. Defaults to a previously generated vkey.</p></li>
+<li><p><strong>public_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to a public file. Defaults to a previously generated public_file.</p></li>
+<li><p><strong>proof_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to the proof. Defaults to a previously generated proof.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Whether the proof is valid or not.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.verify_zkey">
+<span class="sig-name descname"><span class="pre">verify_zkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ptau</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zkey_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.verify_zkey" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verifies a zkey is valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>ptau</strong> (<a class="reference internal" href="ptau.html#ptau.PTau" title="ptau.PTau"><em>PTau</em></a>) – A powers of tau ceremony.</p></li>
+<li><p><strong>zkey_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to the zkey file to verify. Defaults to a previously generated zkey.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ptau.html" class="btn btn-neutral float-right" title="PTau" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Sahil Mahendrakar.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
