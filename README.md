@@ -6,6 +6,7 @@ A Python library that allows for easy compiling/proving/verifying of zk circuits
 ![example workflow](https://github.com/sahilmahendrakar/zkpy/actions/workflows/build.yml/badge.svg)
 ![codecov](https://codecov.io/gh/sahilmahendrakar/zkpy/branch/main/graph/badge.svg?token=UJF0PUJKXN)
 [![PyPI](https://img.shields.io/pypi/v/zkpy)](https://pypi.org/project/zkpy/)
+[![docs](https://img.shields.io/badge/docs-docs-blue)](https://sahilmahendrakar.github.io/zkpy/)
 
 
 ## Overview
@@ -48,6 +49,7 @@ At any stage, we can verify the powers of tau file is valid:
 ```
 ptau.verify()
 ```
+![Ptau demo](./ptau.gif)
 
 ### Circuit
 This class uses a circuit defined in a circom file to generate and verify zk proofs.
@@ -66,6 +68,7 @@ circuit.prove(PLONK)
 circuit.export_vkey()
 circuit.verify(PLONK, vkey_file="vkey.json", public_file="public.json", proof_file="proof.json")
 ```
+![Circuit Demo](./circuit.gif)
 
 ## Contributing
 Help is always appreciated! Feel free to open an issue if you find a problem, or open a pull request if you've solved an issue.
