@@ -36,10 +36,18 @@ def test_get_info(datadir):
     circ.get_info()
 
 
+def test_print_constraints(datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    sym_file = datadir / "example_circuit.sym"
+    circ = Circuit(circ_file, r1cs=r1cs_file, sym_file=sym_file)
+    circ.print_constraints()
+
+
 def test_gen_witness(tmp_path, datadir):
     circ_file = datadir / 'example_circuit.circom'
     r1cs_file = datadir / "example_circuit.r1cs"
-    sym_file = datadir / "example_circuit.r1cs"
+    sym_file = datadir / "example_circuit.sym"
     js_dir = datadir / "example_circuit_js"
     wasm_file = datadir / "example_circuit_js/example_circuit.wasm"
     circ = Circuit(circ_file, r1cs=r1cs_file, sym_file=sym_file, js_dir=js_dir, wasm=wasm_file, working_dir=tmp_path)
@@ -69,7 +77,7 @@ def test_prove(tmp_path, datadir):
     assert public_file.exists() and proof_file.exists()
 
 
-def test_verify_zkey(tmp_path, datadir):
+def test_verify_zkey(datadir):
     circ_file = datadir / 'example_circuit.circom'
     ptau_file = datadir / 'phase2.ptau'
     zkey_file = datadir / 'zkey_groth16.zkey'
@@ -95,3 +103,42 @@ def test_verify(datadir):
     proof_file = datadir / 'proof.json'
     circuit = Circuit(circ_file)
     circuit.verify("plonk", vkey_file=vkey_file, public_file=public_file, proof_file=proof_file)
+
+
+def test_check_circ_compiled_r1cs(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    circ = Circuit(circ_file, working_dir=tmp_path)
+    assert circ.check_circ_compiled() is False
+
+
+def test_check_circ_compiled_sym(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    circ = Circuit(circ_file, working_dir=tmp_path, r1cs=r1cs_file)
+    assert circ.check_circ_compiled() is False
+
+
+def test_check_circ_compiled_wasm(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    sym_file = datadir / "example_circuit.r1cs"
+    circ = Circuit(circ_file, r1cs=r1cs_file, sym_file=sym_file, working_dir=tmp_path)
+    assert circ.check_circ_compiled() is False
+
+
+def test_export_r1cs_to_json(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    r1cs_file = datadir / "example_circuit.r1cs"
+    circ = Circuit(circ_file, r1cs=r1cs_file, working_dir=tmp_path)
+    json_file = tmp_path / circ.export_r1cs_to_json()
+    assert json_file.exists()
+
+
+def test_fullprove(tmp_path, datadir):
+    circ_file = datadir / 'example_circuit.circom'
+    input_file = datadir / 'input.json'
+    circuit = Circuit(circ_file, working_dir=tmp_path)
+    circuit.fullprove("plonk", input_file)
+    public_file = tmp_path / circuit.public_file
+    proof_file = tmp_path / circuit.proof_file
+    assert public_file.exists() and proof_file.exists()
