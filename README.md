@@ -13,10 +13,20 @@ A Python library that allows for easy compiling/proving/verifying of zk circuits
 ZKPy is a Python library that allows for easy compiling/proving/verifying of zk circuits. It is implemented as a wrapper of Circom or SnarkJS, allowing developers to incorporate zero knowledge proofs into Python projects.
 
 Features:
-- Can perform trusted setup (Powers of Tau and Phase 2)
-- Can generate proofs for circuits written in Circom
-- Can verify proofs given witness file and verification key
-- Implements both Groth16 and PLONK proving schemes
+The `ptau` module allows users to:
+- Create and contribute to a powers of tau ceremony
+- Apply beacon to a powers of tau ceremony
+- Perform phase 2 of a powers of tau ceremony (for groth16)
+- Export and import contributions from 3rd party software
+- Verify a powers of tau file
+
+The `circuits` module allows users to:
+- Compile circom circuits
+- Generate r1cs, wasm, etc
+- Generate witness from input file
+- Prove circuits with support for three proving schemes (groth16, PLONK, FFLONK)
+- Export verification keys
+- Verify proofs with support for three proving schemes (groth16, PLONK, FFLONK)
 
 ## Dependencies
 zkpy requires [Circom](https://docs.circom.io/getting-started/installation/) and [snarkjs](https://github.com/iden3/snarkjs). You can find installation instructions [here](https://docs.circom.io/getting-started/installation/).

@@ -1,47 +1,12 @@
 import subprocess
 import os
-import uuid
 from zkpy.ptau import PTau
+import zkpy.utils as utils
 
 GROTH = "groth16"
 PLONK = "plonk"
 FFLONK = "fflonk"
 
-# These handle finding file paths of created files during circuit compilation
-# assume output directory is same as working directory
-# TODO: Might want to move these into their own utility file
-
-
-def get_base(circ_file):
-    return os.path.basename(circ_file).split('.')[0]
-
-
-def get_r1cs_file(circ_file):
-    return get_base(circ_file) + ".r1cs"
-
-
-def get_sym_file(circ_file):
-    return get_base(circ_file) + ".sym"
-
-
-def get_js_dir(circ_file):
-    return get_base(circ_file) + "_js"
-
-
-def get_wasm_file(circ_file):
-    return os.path.join(get_js_dir(circ_file), get_base(circ_file) + ".wasm")
-
-
-def gen_rand_filename():
-    return str(uuid.uuid4())
-
-
-def gen_zkey_file():
-    return gen_rand_filename() + ".zkey"
-
-
-# TODO: Add checks if subprocess fails
-# TODO: Add getters and setters
 class Circuit:
     """
     Manages compiling, proving, and verifying Circom circuits.
@@ -103,33 +68,65 @@ class Circuit:
             capture_output=True,
             cwd=self.working_dir,
         )
-        self.r1cs_file = os.path.join(self.output_dir, get_r1cs_file(self.circ_file))
-        self.sym_file = os.path.join(self.output_dir, get_sym_file(self.circ_file))
-        self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
-        self.js_dir = os.path.join(self.output_dir, get_js_dir(self.circ_file))
+        self.r1cs_file = utils.get_r1cs_file(self.circ_file, self.output_dir)
+        self.sym_file = utils.get_sym_file(self.circ_file, self.output_dir)
+        self.wasm_file = utils.get_wasm_file(self.circ_file, self.output_dir)
+        self.js_dir = utils.get_js_dir(self.circ_file, self.output_dir)
 
-    # TODO: make sure compile was run first or files exist before continuing
+    def check_circ_compiled(self):
+        """Checks that the circuit was compiled and that the relevant files exist"""
+        if self.r1cs_file is None or not utils.exists(self.r1cs_file):
+            print(f"r1cs file {self.r1cs_file} does not exist.")
+            return False
+        if self.sym_file is None or not utils.exists(self.sym_file):
+            print(f"sym file {self.sym_file} does not exist.")
+            return False
+        if self.wasm_file is None or not utils.exists(self.wasm_file):
+            print(f"wasm file {self.wasm_file} does not exist.")
+            return False
+        if self.js_dir is None or not utils.exists(self.js_dir):
+            print(f"js dir {self.js_dir} does not exist")
+            return False
+        return True
+
     def get_info(self):
         """Prints info about the circuit. Requires that the circuit was compiled first."""
+        if self.r1cs_file is None or not utils.exists(self.r1cs_file):
+            raise ValueError(f"r1cs file {self.r1cs_file} does not exist.")
         proc = subprocess.run(
             ["snarkjs", "r1cs", "info", self.r1cs_file], capture_output=True, cwd=self.working_dir, check=True
         )
-        print(proc.stdout.decode())
+        return proc.stdout.decode()
 
     def print_constraints(self):
         """Prints info about the constraints of the circuit. Requires that the circuit was compiled first."""
+        if self.r1cs_file is None or not utils.exists(self.r1cs_file):
+            raise ValueError(f"r1cs file {self.r1cs_file} does not exist.")
+        if self.sym_file is None or not utils.exists(self.sym_file):
+            raise ValueError(f"sym file {self.sym_file} does not exist.")
         proc = subprocess.run(
             ["snarkjs", "r1cs", "print", self.r1cs_file, self.sym_file],
             capture_output=True,
             cwd=self.working_dir,
             check=True,
         )
-        print(proc.stdout.decode())
+        return proc.stdout.decode()
 
-    # TODO: Export r1cs to json
+    def export_r1cs_to_json(self):
+        """Exports the r1cs file as a JSON file."""
+        if self.r1cs_file == None or not utils.exists(self.r1cs_file):
+            raise ValueError(f"r1cs file {self.r1cs_file} does not exist.")
+        json_output_file = utils.get_r1cs_file(self.circ_file, self.output_dir) + '.json'
+        proc = subprocess.run(
+            ["snarkjs", "r1cs", "export", "json", self.r1cs_file, json_output_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
+        )
+        if proc.returncode == 1:
+            raise ValueError(proc.stderr.decode('utf-8'))
+        return json_output_file
 
-    # TODO: handle filename conflict
-    # Need to input an input.json file
     def gen_witness(self, input_file, output_file=None):
         """Generates a witness file. Requires that the circuit was compiled first.
 
@@ -140,7 +137,7 @@ class Circuit:
         if output_file is None:
             output_file = os.path.join(self.output_dir, "witness.wtns")
         if self.wasm_file is None and self.js_dir is not None:
-            self.wasm_file = os.path.join(self.output_dir, get_wasm_file(self.circ_file))
+            self.wasm_file = os.path.join(self.output_dir, utils.get_wasm_file(self.circ_file, self.output_dir))
         gen_wtns_file = os.path.join(self.js_dir, "generate_witness.js")
         proc = subprocess.run(
             ["node", gen_wtns_file, self.wasm_file, input_file, output_file],
@@ -148,6 +145,8 @@ class Circuit:
             cwd=self.working_dir,
             check=True,
         )
+        if proc.returncode != 0:
+            raise ValueError(proc.stderr('utf-8'))
         print(proc.stdout.decode('utf-8'))
         print(proc.stderr.decode('utf-8'))
         self.wtns_file = output_file
@@ -162,8 +161,9 @@ class Circuit:
             output_file (str): Path of where the zkey file should be outputted. Defaults to a randomly generated file name.
         """
         if output_file is None:
-            output_file = os.path.join(self.output_dir, gen_zkey_file())
-        # TODO: check scheme is either plonk, fflonk, or groth
+            output_file = os.path.join(self.output_dir, utils.gen_rand_zkey_file())
+        if scheme != PLONK and scheme != FFLONK and scheme != GROTH:
+            raise ValueError("scheme must either be 'plonk', 'fflonk', or 'groth16'")
         proc = subprocess.run(
             ["snarkjs", scheme, "setup", self.r1cs_file, ptau.ptau_file, output_file],
             capture_output=True,
@@ -181,7 +181,7 @@ class Circuit:
             output_file (str, optional): Path of where the zkey file should be outputted. Defaults to a randomly generated file name.
         """
         if output_file is None:
-            output_file = os.path.join(self.output_dir, gen_zkey_file())
+            output_file = os.path.join(self.output_dir, utils.gen_rand_zkey_file())
         proc = subprocess.run(
             [
                 "snarkjs",
@@ -252,7 +252,7 @@ class Circuit:
         if zkey_file is None:
             zkey_file = self.zkey_file
         if output_file is None:
-            output_file = os.path.join(self.output_dir, gen_rand_filename() + '.json')
+            output_file = os.path.join(self.output_dir, utils.gen_rand_filename() + '.json')
         subprocess.run(
             ["snarkjs", "zkey", "export", "verificationkey", zkey_file, output_file],
             capture_output=True,
@@ -290,7 +290,44 @@ class Circuit:
         else:
             return True
 
-    # TODO: Create a convenience function that handles compilation, setup, witness gen, and powers of tau for a circuit
+    def fullprove(self, scheme, input_file):
+        """Convenience function that handles proving a circuit in its entirety. Performs PTau ceremony, compiles circuit, and proves it.
+
+        Args:
+            scheme (str): The proving scheme to use. Can either be `GROTH`, `PLONK`, or `FFLONK`.
+            input_file (str): Path to an input json file that specifies the inputs to the circuit.
+        """
+        ptau = PTau(working_dir=self.working_dir)
+        ptau.start()
+        ptau.contribute()
+        ptau.beacon()
+        ptau.prep_phase2()
+        ptau.verify()
+
+        self.compile()
+        self.gen_witness(input_file)
+        self.setup(scheme, ptau)
+        self.prove(scheme)
+        self.export_vkey()
+        self.verify(scheme)
+
+    def export_sol(self, output_file):
+        """Convenience function that handles proving a circuit in its entirety. Performs PTau ceremony, compiles circuit, and proves it.
+
+        Args:
+            scheme (str): The proving scheme to use. Can either be `GROTH`, `PLONK`, or `FFLONK`.
+            input_file (str): Path to an input json file that specifies the inputs to the circuit.
+        """
+        if self.zkey_file is None or not utils.exists(self.zkey_file):
+            raise ValueError(f"zkey file {self.zkey_file} does not exist")
+        proc = subprocess.run(
+            ["snarkjs", "zkey", "export", "solidityverifier", self.zkey_file, output_file],
+            capture_output=True,
+            cwd=self.working_dir,
+            check=True,
+        )
+        if proc.returncode == 1:
+            raise ValueError(proc.stderr.decode('utf-8'))
 
 
 if __name__ == "__main__":
