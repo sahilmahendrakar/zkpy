@@ -87,8 +87,7 @@
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>circ_file</strong> (<em>str</em>) – Path to a circom circuit file.</p></li>
-<li><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where generated files should be outputted.</p></li>
-<li><p><strong>directory.</strong> (<em>Defaults to the current</em>) – </p></li>
+<li><p><strong>output_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where generated files should be outputted. Defaults to the current directory.</p></li>
 <li><p><strong>working_dir</strong> (<em>str</em><em>, </em><em>optional</em>) – Path that all given file paths are relative to. Defaults to the current directory</p></li>
 <li><p><strong>r1cs</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated r1cs file.</p></li>
 <li><p><strong>sym_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Optional path to a pre-generated symbols file.</p></li>
@@ -200,6 +199,12 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.check_circ_compiled">
+<span class="sig-name descname"><span class="pre">check_circ_compiled</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.check_circ_compiled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Checks that the circuit was compiled and that the relevant files exist</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="circuit.Circuit.compile">
 <span class="sig-name descname"><span class="pre">compile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.compile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compiles the circuit and generates an r1cs file, a symbols file, a wasm file, and a js dir</p>
@@ -220,6 +225,26 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.export_r1cs_to_json">
+<span class="sig-name descname"><span class="pre">export_r1cs_to_json</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.export_r1cs_to_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exports the r1cs file as a JSON file.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.export_sol">
+<span class="sig-name descname"><span class="pre">export_sol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.export_sol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function that handles proving a circuit in its entirety. Performs PTau ceremony, compiles circuit, and proves it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scheme</strong> (<em>str</em>) – The proving scheme to use. Can either be <cite>GROTH</cite>, <cite>PLONK</cite>, or <cite>FFLONK</cite>.</p></li>
+<li><p><strong>input_file</strong> (<em>str</em>) – Path to an input json file that specifies the inputs to the circuit.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="circuit.Circuit.export_vkey">
 <span class="sig-name descname"><span class="pre">export_vkey</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">zkey_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.export_vkey" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exports a verification key.</p>
@@ -228,6 +253,20 @@
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>zkey_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to a zkey file from which the verification key should be created. Defaults to a previously generated zkey.</p></li>
 <li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to where the verification key file should be outputted. Defaults to a randomly generated file name.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuit.Circuit.fullprove">
+<span class="sig-name descname"><span class="pre">fullprove</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scheme</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuit.Circuit.fullprove" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convenience function that handles proving a circuit in its entirety. Performs PTau ceremony, compiles circuit, and proves it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scheme</strong> (<em>str</em>) – The proving scheme to use. Can either be <cite>GROTH</cite>, <cite>PLONK</cite>, or <cite>FFLONK</cite>.</p></li>
+<li><p><strong>input_file</strong> (<em>str</em>) – Path to an input json file that specifies the inputs to the circuit.</p></li>
 </ul>
 </dd>
 </dl>

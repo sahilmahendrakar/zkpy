@@ -106,6 +106,12 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="ptau.PTau.cleanup">
+<span class="sig-name descname"><span class="pre">cleanup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptau.PTau.cleanup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes old/intermediate powers of tau files</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="ptau.PTau.contribute">
 <span class="sig-name descname"><span class="pre">contribute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ptau.PTau.contribute" title="Permalink to this definition">¶</a></dt>
 <dd><p>Contributes to the powers of tau ceremony</p>
@@ -115,6 +121,46 @@
 <li><p><strong>name</strong> (<em>str</em><em>, </em><em>optional</em>) – Name of the contribution.</p></li>
 <li><p><strong>entropy</strong> (<em>str</em><em>, </em><em>optional</em>) – Random text to use as entropy in the contribution. Defaults to random lowercase letters.</p></li>
 <li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the ptau file should be outputted to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ptau.PTau.contribute_challenge">
+<span class="sig-name descname"><span class="pre">contribute_challenge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">challenge</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">curve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bn128'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ptau.PTau.contribute_challenge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Contribute to a challenge and produce a response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the response file should be outputted to.</p></li>
+<li><p><strong>entropy</strong> (<em>str</em>) – Random text to serve as entropy to the contribution</p></li>
+<li><p><strong>curve</strong> (<em>str</em><em>, </em><em>optional</em>) – Specifies which cryptographic curve to use. Defaults to the <cite>bn128</cite> curve.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ptau.PTau.export_challenge">
+<span class="sig-name descname"><span class="pre">export_challenge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">output_file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ptau.PTau.export_challenge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export a challenge that can be sent to third party software.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the challenge file should be outputted to.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ptau.PTau.import_response">
+<span class="sig-name descname"><span class="pre">import_response</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">response</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ptau.PTau.import_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Import a response.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>response</strong> (<em>str</em><em>, </em><em>optional</em>) – Path to response file to use as input.</p></li>
+<li><p><strong>output_file</strong> (<em>str</em><em>, </em><em>optional</em>) – Path of where the response file should be outputted to.</p></li>
 </ul>
 </dd>
 </dl>
