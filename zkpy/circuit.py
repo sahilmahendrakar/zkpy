@@ -7,6 +7,7 @@ GROTH = "groth16"
 PLONK = "plonk"
 FFLONK = "fflonk"
 
+
 class Circuit:
     """
     Manages compiling, proving, and verifying Circom circuits.
@@ -114,7 +115,7 @@ class Circuit:
 
     def export_r1cs_to_json(self):
         """Exports the r1cs file as a JSON file."""
-        if self.r1cs_file == None or not utils.exists(self.r1cs_file):
+        if self.r1cs_file is None or not utils.exists(self.r1cs_file):
             raise ValueError(f"r1cs file {self.r1cs_file} does not exist.")
         json_output_file = utils.get_r1cs_file(self.circ_file, self.output_dir) + '.json'
         proc = subprocess.run(

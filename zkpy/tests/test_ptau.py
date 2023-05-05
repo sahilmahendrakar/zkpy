@@ -60,10 +60,12 @@ def test_verify_fails_if_file_changed(tmp_path, datadir):
             f.write('asdjfakjsfk')
         assert ptau.verify() is False
 
+
 def test_verify(tmp_path, datadir):
     ptau_file_contribute = datadir / "contributed.ptau"
     ptau = PTau(ptau_file=ptau_file_contribute, working_dir=tmp_path)
     assert ptau.verify() is True
+
 
 def test_export_challenge(tmp_path, datadir):
     ptau_file_start = datadir / "start.ptau"
@@ -71,6 +73,7 @@ def test_export_challenge(tmp_path, datadir):
     ptau.export_challenge(output_file="challenge")
     challenge_file = tmp_path / "challenge"
     assert challenge_file.exists()
+
 
 def test_contribute_challenge(tmp_path, datadir):
     ptau_file_start = datadir / "start.ptau"
@@ -82,6 +85,7 @@ def test_contribute_challenge(tmp_path, datadir):
     response_file = tmp_path / output_file
     assert response_file.exists()
 
+
 def test_import_response(tmp_path, datadir):
     ptau_file_start = datadir / "start.ptau"
     ptau = PTau(ptau_file=ptau_file_start, working_dir=tmp_path)
@@ -90,10 +94,11 @@ def test_import_response(tmp_path, datadir):
     output_file = tmp_path / ptau.ptau_file
     assert output_file.exists()
 
+
 def test_cleanup(tmp_path):
     for file in list(tmp_path.iterdir()):
         if file.is_file() and ".ptau" in file.name:
-                file.unlink()
+            file.unlink()
     ptau = PTau(working_dir=tmp_path)
     ptau.start()
     ptau.contribute()

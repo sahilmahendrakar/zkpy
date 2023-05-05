@@ -39,9 +39,9 @@ class PTau:
         """
         # snarkjs powersoftau new bn128 14 pot14_0000.ptau -v
         proc = subprocess.run(
-            ['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"], 
+            ['snarkjs', 'powersoftau', 'new', curve, constraints, self.ptau_file, "-v"],
             capture_output=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stdout.decode('utf-8'))
@@ -76,7 +76,7 @@ class PTau:
             ],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stdout.decode('utf-8'))
@@ -94,12 +94,12 @@ class PTau:
             ["snarkjs", "powersoftau", "export", "challenge", self.ptau_file, output_file],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stderr.decode('utf-8'))
         return output_file
-    
+
     def contribute_challenge(self, challenge, output_file, entropy, curve='bn128'):
         """Contribute to a challenge and produce a response.
 
@@ -112,12 +112,12 @@ class PTau:
             ["snarkjs", "powersoftau", "challenge", "contribute", curve, challenge, output_file, f"-e={entropy}"],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stderr.decode('utf-8'))
         return output_file
-    
+
     def import_response(self, response, output_file=None):
         """Import a response.
 
@@ -131,7 +131,7 @@ class PTau:
             ["snarkjs", "powersoftau", "import", "response", self.ptau_file, response, output_file],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stderr.decode('utf-8'))
@@ -153,7 +153,7 @@ class PTau:
             ["snarkjs", "powersoftau", "beacon", self.ptau_file, output_file, public_entropy, str(iter)],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stdout.decode('utf-8'))
@@ -173,7 +173,7 @@ class PTau:
             ["snarkjs", "powersoftau", "prepare", "phase2", self.ptau_file, output_file, "-v"],
             capture_output=True,
             check=True,
-            cwd=self.working_dir
+            cwd=self.working_dir,
         )
         if proc.returncode != 0:
             raise ValueError(proc.stdout.decode('utf-8'))
@@ -193,6 +193,7 @@ class PTau:
         """Deletes old/intermediate powers of tau files"""
         for file in self.old_files:
             os.remove(file)
+
 
 if __name__ == "__main__":
     ptau = PTau(working_dir='./tmp')
