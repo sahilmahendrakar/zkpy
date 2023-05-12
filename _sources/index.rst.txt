@@ -3,6 +3,9 @@
 Welcome to zkpy's documentation!
 ================================
 
+A Python library that allows for easy compiling/proving/verifying of zk circuits.
+
+
 .. toctree::
    
    getting-started
